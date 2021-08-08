@@ -18,11 +18,19 @@ CREATE TABLE users (
 );
 
 CREATE TABLE bills (
+    id INT PRIMARY KEY NOT NULL,
     id_user INT NOT NULL,
-    id_product INT NOT NULL,
-    quantity INT,
     created_at DATETIME NOT NULL DEFAULT now(),
     FOREIGN KEY (id_user) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE bill_detail (
+    id_bill INT NOT NULL,
+    id_product INT NOT NULL,
+    quantity INT,
+    FOREIGN KEY (id_bill) REFERENCES bills(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_product) REFERENCES products(id)
     ON DELETE CASCADE ON UPDATE CASCADE

@@ -15,7 +15,6 @@ cors();
 use Firebase\JWT\JWT;
 
 $data = json_decode(file_get_contents("php://input"));
-$billArr = $data;
 
 // Lấy token từ header
 $access_token = getBearerToken();
@@ -29,26 +28,23 @@ if ($access_token) {
         $username = $decoded->username;
 
         if ($decoded) {
-            // Tạo bill mới
-            $id_bill = rand(0, 99999999);
+            $sql = "SELECT id FROM bills
+            WHERE id_user = (SELECT id from users WHERE username = '$username')";
 
-            $sql = "INSERT INTO bills (id, id_user)
-            VALUES ($id_bill,(SELECT id FROM users WHERE username = '$username'))";
-            execute($sql);
+            $listIdBill = executeResult($sql);
 
+            $listBill = [];
+            for ($i = 0; $i < count($listIdBill); $i++) {
+                $idBill = $listIdBill[$i]['id'];
+                $sql = "SELECT ct.id_bill, ct.quantity, sp.price, sp.name, sp.images 
+                FROM bill_detail ct JOIN products sp ON ct.id_product = sp.id
+                WHERE id_bill = $idBill";
 
-            echo json_encode(array(
-                'id_bill' => $id_bill
-            ));
+                $data = executeResult($sql);
+                array_push($listBill, $data);
+            }
 
-            for ($i = 0; $i < count($billArr); $i++) {
-                $idProduct = $billArr[$i]->id;
-                $quantity = $billArr[$i]->quantity;
-
-                $sql = "INSERT INTO bill_detail (id_bill, id_product, quantity) 
-                VALUES ($id_bill,$idProduct,$quantity);";
-                execute($sql);
-            };
+            echo json_encode($listBill);
         } else {
             echo json_encode(array(
                 'message' => "Access denied"
