@@ -2,9 +2,9 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-include_once './libs/PHPMailer-master/src/PHPMailer.php';
-include_once './libs/PHPMailer-master/src/SMTP.php';
-include_once './libs/PHPMailer-master/src/Exception.php';
+include_once '../libs/PHPMailer-master/src/PHPMailer.php';
+include_once '../libs/PHPMailer-master/src/SMTP.php';
+include_once '../libs/PHPMailer-master/src/Exception.php';
 
 function fixSqlInjection($str)
 {

@@ -8,7 +8,6 @@ include_once '../../libs/php-jwt-master/src/SignatureInvalidException.php';
 include_once '../../libs/php-jwt-master/src/JWT.php';
 include_once '../../helpers/cors.php';
 include_once '../../db/dbhelper.php';
-include_once '../../helpers/utility.php';
 
 cors();
 

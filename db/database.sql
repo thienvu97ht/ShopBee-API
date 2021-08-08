@@ -18,10 +18,14 @@ CREATE TABLE users (
 );
 
 CREATE TABLE bills (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    created_at DATETIME NOT NULL DEFAULT now(),
     id_user INT NOT NULL,
+    id_product INT NOT NULL,
+    quantity INT,
+    created_at DATETIME NOT NULL DEFAULT now(),
     FOREIGN KEY (id_user) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_product) REFERENCES products(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE categories (
@@ -39,14 +43,17 @@ CREATE TABLE products (
     images VARCHAR(2500),
     id_loai INT NOT NULL,
     FOREIGN KEY (id_loai) REFERENCES categories(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE carts (
     id_user INT NOT NULL,
     id_product INT NOT NULL,
     quantity INT,
-    FOREIGN KEY (id_user) REFERENCES users(id),
+    FOREIGN KEY (id_user) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_product) REFERENCES products(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE token (
@@ -60,6 +67,8 @@ CREATE TABLE favorites (
     id_user INT NOT NULL,
     id_product INT NOT NULL,
     is_like INT,
-    FOREIGN KEY (id_user) REFERENCES users(id),
+    FOREIGN KEY (id_user) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_product) REFERENCES products(id)
+    ON DELETE CASCADE ON UPDATE CASCADE  
 );
