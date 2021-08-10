@@ -15,6 +15,7 @@ cors();
 use Firebase\JWT\JWT;
 
 $data = json_decode(file_get_contents("php://input"));
+$password = $data->password;
 
 // Lấy token từ header
 $access_token = getBearerToken();
@@ -26,26 +27,18 @@ if ($access_token) {
         $decoded = JWT::decode($access_token, $MY_SECRET_KEY, array('HS256'));
         http_response_code(200);
         $username = $decoded->username;
+        $hash_password = password_hash($password, PASSWORD_BCRYPT);
 
         if ($decoded) {
-            $sql = "SELECT id FROM bills
-            WHERE id_user = (SELECT id from users WHERE username = '$username')
-            ORDER BY created_at desc";
+            $sql = "UPDATE users
+            SET  hash_password= '$hash_password'
+            WHERE username = '$username'";
 
-            $listIdBill = executeResult($sql);
+            execute($sql);
 
-            $listBill = [];
-            for ($i = 0; $i < count($listIdBill); $i++) {
-                $idBill = $listIdBill[$i]['id'];
-                $sql = "SELECT ct.id_bill, ct.quantity, sp.price, sp.name, sp.images 
-                FROM bill_detail ct JOIN products sp ON ct.id_product = sp.id
-                WHERE id_bill = $idBill";
-
-                $data = executeResult($sql);
-                array_push($listBill, $data);
-            }
-
-            echo json_encode($listBill);
+            echo json_encode(array(
+                'message' => "Success"
+            ));
         } else {
             echo json_encode(array(
                 'message' => "Access denied"

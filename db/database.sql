@@ -25,17 +25,6 @@ CREATE TABLE bills (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
-CREATE TABLE bill_detail (
-    id_bill INT NOT NULL,
-    id_product INT NOT NULL,
-    quantity INT,
-    FOREIGN KEY (id_bill) REFERENCES bills(id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_product) REFERENCES products(id)
-    ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 CREATE TABLE categories (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(200),
@@ -53,6 +42,18 @@ CREATE TABLE products (
     FOREIGN KEY (id_loai) REFERENCES categories(id)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE bill_detail (
+    id_bill INT NOT NULL,
+    id_product INT NOT NULL,
+    quantity INT,
+    FOREIGN KEY (id_bill) REFERENCES bills(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_product) REFERENCES products(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
 
 CREATE TABLE carts (
     id_user INT NOT NULL,
